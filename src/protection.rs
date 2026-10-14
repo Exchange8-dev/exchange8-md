@@ -288,7 +288,7 @@ pub fn uncross_time(day_seed: u64, open_us: u64, window_us: u64) -> u64 {
     x ^= x << 25;
     x ^= x >> 27;
     let r = x.wrapping_mul(0x2545F4914F6CDD1D);
-    open_us + (r % window_us as u64)
+    open_us + (r % window_us)
 }
 
 // ---------------------------------------------------------------------------
@@ -834,10 +834,10 @@ mod tests {
         let t1 = uncross_time(42, 1_000_000, 300_000);
         let t2 = uncross_time(42, 1_000_000, 300_000);
         assert_eq!(t1, t2); // deterministic per seed
-        assert!(t1 >= 1_000_000 && t1 < 1_300_000);
+        assert!((1_000_000..1_300_000).contains(&t1));
         // Different seed → (almost surely) different time.
         let t3 = uncross_time(43, 1_000_000, 300_000);
-        assert!(t3 >= 1_000_000 && t3 < 1_300_000);
+        assert!((1_000_000..1_300_000).contains(&t3));
         // Zero window → open time.
         assert_eq!(uncross_time(1, 5_000, 0), 5_000);
     }

@@ -281,7 +281,7 @@ impl ConsolidatedBook {
 
     /// Best bid/ask with displayed sizes (L1 derivation, `W` source).
     pub fn bbo(&self) -> (Option<Level>, Option<Level>) {
-        let best_bid = self.bids.iter().rev().next().map(|(p, q)| Level {
+        let best_bid = self.bids.iter().next_back().map(|(p, q)| Level {
             price: Price { raw: *p, scale: 4 },
             qty: Qty::units(*q),
         });
