@@ -1,21 +1,21 @@
-# BUSINESS.md: Ex8:MD — Business Requirements & Functionality
+# BUSINESS.md: Exchange8:MD — Business Requirements & Functionality
 
 > Audience: product owners, business analysts, and anyone evaluating what
-> Ex8:MD **does for the business**. For architecture read `README.md`;
+> Exchange8:MD **does for the business**. For architecture read `README.md`;
 > for wire-level detail read `DESIGN.md`.
 
 ## 1. Business Purpose
 
-- **Give every market participant the same picture of the market.** Ex8:MD
+- **Give every market participant the same picture of the market.** Exchange8:MD
   turns matching-engine activity into the venue's public market data: the
   consolidated depth book, the trade tape, last-trade statistics, and market
   status — one authoritative publication per event, for every consumer.
 - **Meet exchange-grade publication obligations.** An MTF/ATS must publish
   order-book depth, trade prints (including busts and corrections), and market
-  state in standardized wire formats with sequence integrity; Ex8:MD is the
+  state in standardized wire formats with sequence integrity; Exchange8:MD is the
   single place those obligations are discharged.
 - **Turn raw activity into usable app experiences.** Consumers of the venue's
-  web and mobile apps do not speak feed protocols; Ex8:MD provides
+  web and mobile apps do not speak feed protocols; Exchange8:MD provides
   snapshots joined with live deltas so a user opening a security sees the
   current book immediately and stays current afterwards.
 - **Keep trading safe when markets move fast.** Volatility interruptions
@@ -51,11 +51,11 @@
 
 | Delegated concern | Owning service |
 |---|---|
-| Order matching, order state, auction uncross execution | Ex8:ME |
-| Trade settlement and order/trade settlement state | Ex8:Clearing |
-| Venue/external market data consumption (upstream quotes) | Ex8:VFeeds |
-| Pre-trade risk and credit gates | Ex8:Risk |
-| Order routing and smart order decisions | Ex8:OMS / Ex8:SOR |
+| Order matching, order state, auction uncross execution | Exchange8:ME |
+| Trade settlement and order/trade settlement state | Exchange8:Clearing |
+| Venue/external market data consumption (upstream quotes) | Exchange8:VFeeds |
+| Pre-trade risk and credit gates | Exchange8:Risk |
+| Order routing and smart order decisions | Exchange8:OMS / Exchange8:SOR |
 | Scheduled market events (what fires when) | Sentin8:Cron |
 | Identity, credentials, policy administration | Sentin8:Auth / Sentin8:Policy (Shield) |
 | Durable cross-service event delivery and audit delivery | Sentin8:Bus / Sentin8:Sys |
@@ -157,7 +157,7 @@ schedule-fires; platform policy hot-reload events.
 
 ## 6. Target-User Roles & Use Cases
 
-| Persona | What they do with Ex8:MD |
+| Persona | What they do with Exchange8:MD |
 |---|---|
 | Retail / institutional app user | Opens a security page: gets the current depth snapshot, then live deltas; sees the last price, volume, and market state |
 | External data subscriber / vendor | Connects with venue feed credentials to the multicast/ticket-based streams; replays by sequence after disconnects |
@@ -195,11 +195,11 @@ schedule-fires; platform policy hot-reload events.
 
 ## 8. Dependencies & Reliance
 
-- **Ex8:ME / Ex8:Gateway** — the source of order, trade, cross, and instrument
+- **Exchange8:ME / Exchange8:Gateway** — the source of order, trade, cross, and instrument
   state events; without them there is nothing to publish.
-- **Ex8:Clearing** — busts and corrections (the only legitimate tape
+- **Exchange8:Clearing** — busts and corrections (the only legitimate tape
   retractions/corrections).
-- **Ex8:VFeeds** — upstream venue quotation data underlying protected quotes.
+- **Exchange8:VFeeds** — upstream venue quotation data underlying protected quotes.
 - **Sentin8:Cron** — the trading-calendar scheduling (preopen/open/close/
   shutdown fires that drive the session machine).
 - **Sentin8:Bus** — durable inbound event consumption and outbound event
@@ -264,7 +264,7 @@ schedule-fires; platform policy hot-reload events.
 - **Order-flow restriction enforcement point.** The ratio and quote-life
   meters are computed here; whether blocking happens at the gateway, the
   matching engine, or as post-trade penalties is a market-policy decision
-  shared with Ex8:Gateway/Ex8:ME.
+  shared with Exchange8:Gateway/Exchange8:ME.
 - **Index entitlements.** Real-time index publication consumption (frequency,
   redistribution rights) is an entitlement product question for margin,
   funding, and data-vendor consumers.

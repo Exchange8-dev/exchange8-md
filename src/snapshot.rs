@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: Copyright Contributors to the Exchange8:MD
 // SPDX-License-Identifier: Apache-2.0
 
-//! Ex8:MD snapshot API + SSE delta shapes (see services/md/DESIGN.md §2).
+//! Exchange8:MD snapshot API + SSE delta shapes (see services/md/DESIGN.md §2).
 //!
 //! Market-data design §2: app-grade feeds are SSE deltas + snapshot served
 //! through the BFF subscription. The snapshot is the client's join point:

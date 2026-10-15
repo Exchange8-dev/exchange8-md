@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: Copyright Contributors to the Exchange8:MD
 // SPDX-License-Identifier: Apache-2.0
 
-//! Ex8:MD/Market-protection extensions + surveillance framework + index
+//! Exchange8:MD/Market-protection extensions + surveillance framework + index
 //! publication + auction extensions + conformance & reconstruction
 //! (see services/md/DESIGN.md §2 for the component map).
 //!

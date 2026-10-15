@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: Copyright Contributors to the Exchange8:MD
 // SPDX-License-Identifier: Apache-2.0
 
-//! Ex8:MD SQL integration tests — RLS matrix replica.
+//! Exchange8:MD SQL integration tests — RLS matrix replica.
 //!
 //! Runs against the live platform PostgreSQL (18) as the `exchange8_probe`
 //! NOBYPASSRLS role (`sql/probe.sql`) — RLS is meaningful only when the

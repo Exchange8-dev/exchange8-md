@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: Copyright Contributors to the Exchange8:MD
 // SPDX-License-Identifier: Apache-2.0
 
-//! Ex8:MD consolidated depth book + ITCH VER2 event mapper.
+//! Exchange8:MD consolidated depth book + ITCH VER2 event mapper.
 //!
 //! Mirrors ME order lifecycle events into a per-(book, instrument)
 //! consolidated depth book (the platform spec) and

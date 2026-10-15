@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: Copyright Contributors to the Exchange8:MD
 // SPDX-License-Identifier: Apache-2.0
 
-//! Ex8:MD LULD price-band engine.
+//! Exchange8:MD LULD price-band engine.
 //!
 //! Per-instrument limit-up/limit-down bands around a reference price
 //! (previous close or last auction price) with tiered widths. A trade that

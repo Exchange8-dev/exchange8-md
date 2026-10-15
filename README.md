@@ -1,8 +1,8 @@
-# README.md: Ex8:MD
+# README.md: Exchange8:MD
 
 ## 1. Summary
 
-Ex8:MD (`services/md/`, binary `exchange8-md`, service_type `exchange8:md`) is the
+Exchange8:MD (`services/md/`, binary `exchange8-md`, service_type `exchange8:md`) is the
 consolidated market-data publisher of the exchange8 vertical (the capital-markets
 tier of the Sentin8 platform). It consumes matching-engine order/trade/status
 events and produces every market-data surface: the per-(book, instrument)
@@ -25,7 +25,7 @@ Sentin8:Bus and `md.audit_journal` pushes to Sentin8:Sys.
 
 ## 2. Motivation
 
-- **One publication point per delta.** Ex8:ME owns order state, Ex8:Clearing owns
+- **One publication point per delta.** Exchange8:ME owns order state, Exchange8:Clearing owns
   trade settlement state; neither should be reachable by feed consumers. A single
   market-data publisher mirrors engine events into the display book so every
   consumer (gateway, OMS, app UI, external subscribers) sees exactly one
@@ -69,14 +69,14 @@ beside the book as first-class domain objects.
 ```mermaid
 graph TD
     subgraph Producers["Event producers (Sentin8:Bus inbox-first)"]
-        ME["Ex8:ME (booked/executed/cancel/replace/status)"]
-        GW["Ex8:Gateway (internal cross, instrument state)"]
-        CLR["Ex8:Clearing (trade bust, trade amend)"]
-        VF["Ex8:VFeeds (venue quotes for protected quotations)"]
+        ME["Exchange8:ME (booked/executed/cancel/replace/status)"]
+        GW["Exchange8:Gateway (internal cross, instrument state)"]
+        CLR["Exchange8:Clearing (trade bust, trade amend)"]
+        VF["Exchange8:VFeeds (venue quotes for protected quotations)"]
         CRON["Sentin8:Cron (schedule-fire → calendar transitions)"]
     end
 
-    subgraph MD["Ex8:MD process (exchange8-md)"]
+    subgraph MD["Exchange8:MD process (exchange8-md)"]
         BOOK["ConsolidatedBook per (book, instrument): order map + displayed level sets (hidden/odd stripped)"]
         MAPPER["ITCH VER2 mapper: A/E/X/D/U/P/Q/B/H/S/W"]
         CAL["MarketCalendar state machine: phases → S codes + instrument status"]

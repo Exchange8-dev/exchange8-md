@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: Copyright Contributors to the Exchange8:MD
 // SPDX-License-Identifier: Apache-2.0
 
-//! Ex8:MD bust/amend fan-out + system events & market calendar
+//! Exchange8:MD bust/amend fan-out + system events & market calendar
 //! (see services/md/DESIGN.md §2).
 //!
 //! - **Bust/amend fan-out**: a Clearing bust event produces the

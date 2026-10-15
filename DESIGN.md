@@ -1,8 +1,8 @@
-# DESIGN.md: Ex8:MD — Detailed Design Document
+# DESIGN.md: Exchange8:MD — Detailed Design Document
 
 ## 1. Scope & Context
 
-**Ex8:MD owns** (resources, tables, event families):
+**Exchange8:MD owns** (resources, tables, event families):
 
 - The per-(book, instrument) consolidated depth book as a display projection of
   matching-engine/gateway events, and the ITCH VER2 byte encoding of every
@@ -25,18 +25,18 @@
 - MemBus publication families `md.trade` (tape) and `md.book` (book deltas) —
   pub/sub class, newest-wins.
 
-**Ex8:MD does NOT own** (delegated to other services):
+**Exchange8:MD does NOT own** (delegated to other services):
 
-- Order state (Ex8:ME produces the events; Ex8:Clearing owns order/trade
+- Order state (Exchange8:ME produces the events; Exchange8:Clearing owns order/trade
   settlement state) — MD persists only feed session state, sequences, and the
   per-session replay store.
-- External venue consumption — Ex8:VFeeds upstreams venue quotes and consumes
+- External venue consumption — Exchange8:VFeeds upstreams venue quotes and consumes
   them; MD only re-publishes protected quotes derived from CBBO.
 - Auction execution (call collection, uncross pricing) — the volatility
-  auction arc lives here as the *decision*, the auction itself is Ex8:ME
+  auction arc lives here as the *decision*, the auction itself is Exchange8:ME
   (auctions design).
-- Order routing, pre-trade risk gates, clearing/settlement — Ex8:OMS, Ex8:Risk,
-  Ex8:Clearing, Ex8:Settlement.
+- Order routing, pre-trade risk gates, clearing/settlement — Exchange8:OMS, Exchange8:Risk,
+  Exchange8:Clearing, Exchange8:Settlement.
 - Index value computation — the index engine owns the portfolio math; MD
   carries only the publication gating and divisor rebalance helper.
 - Surveillance case management beyond the in-pipeline alert escalation —
@@ -45,13 +45,13 @@
 ```mermaid
 graph TD
     subgraph Vertical["exchange8 vertical (db exchange8)"]
-        ME["Ex8:ME"]
-        GATEWAY["Ex8:Gateway"]
-        CLR["Ex8:Clearing"]
-        VFEEDS["Ex8:VFeeds"]
-        OMS["Ex8:OMS"]
-        RISK["Ex8:Risk"]
-        MD["Ex8:MD (this service)"]
+        ME["Exchange8:ME"]
+        GATEWAY["Exchange8:Gateway"]
+        CLR["Exchange8:Clearing"]
+        VFEEDS["Exchange8:VFeeds"]
+        OMS["Exchange8:OMS"]
+        RISK["Exchange8:Risk"]
+        MD["Exchange8:MD (this service)"]
         CRON["Sentin8:Cron"]
     end
 
@@ -85,7 +85,7 @@ graph TD
 
 ```mermaid
 graph TD
-    subgraph Container["Ex8:MD binary (exchange8-md)"]
+    subgraph Container["Exchange8:MD binary (exchange8-md)"]
         subgraph Pure["Pure domain core (no I/O)"]
             BOOKC["book.rs — ConsolidatedBook + ITCH mapper"]
             CAL["calendar.rs — MarketCalendar + bust/amend fan-out"]
@@ -258,7 +258,7 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     autonumber
-    participant ME as Ex8:ME (print)
+    participant ME as Exchange8:ME (print)
     participant SV as exchange8-md (ingest)
     participant LE as LuldEngine (instrument state)
     participant VA as VolatilityAuction arc
@@ -495,8 +495,8 @@ Design-doc-identified event shapes (`exchange8:md:*`, e.g. band-state changes,
 system events) ride the same outbox → Bus produce plane; the durable topic
 naming for each family is the event-flow contract below.
 
-Inbound (consumed): Ex8:ME order/trade/status events, Ex8:Gateway internal
-cross + instrument state, Ex8:Clearing bust/amend, Ex8:VFeeds CBBO quote
+Inbound (consumed): Exchange8:ME order/trade/status events, Exchange8:Gateway internal
+cross + instrument state, Exchange8:Clearing bust/amend, Exchange8:VFeeds CBBO quote
 events, Sentin8:Cron calendar schedule-fire.
 
 ### Multi-party interaction: BFF subscription fan-out
@@ -504,7 +504,7 @@ events, Sentin8:Cron calendar schedule-fire.
 ```mermaid
 sequenceDiagram
     autonumber
-    participant ME as Ex8:ME
+    participant ME as Exchange8:ME
     participant BUSI as Sentin8:Bus
     participant SV as exchange8-md
     participant BFF2 as Sentin8:BFF
