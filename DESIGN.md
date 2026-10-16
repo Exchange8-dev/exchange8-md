@@ -297,7 +297,7 @@ sequenceDiagram
     DB-->>ENG: rows
     ENG-->>SV: sets (cached engine view)
     SV-->>ADM: policy set list
-    Note over ADM,DB: PUT /test/enforce/shadow/disable mutate tenant-authored sets;<br>forbid beats permit; shadow never blocks (would-deny logged + emitted)
+    Note over ADM,DB: PUT /test/enforce/shadow/disable mutate tenant-authored sets,<br>forbid beats permit, shadow never blocks (would-deny logged + emitted)
     ADM->>SV: GET /v1/admin/{sessions,bands} (RFW data endpoints)
     SV-->>ADM: feed sessions / LULD bands (admin RFW page data)
 ```
@@ -774,7 +774,7 @@ graph TD
     G2 --> P4
     G3 --> P4
     G4["unit modules compile with golden constants"] --> P4
-    G5[""] --> P4
+    G5 --> P4
     P4 --> S1
     P4 --> P4B["workspace SQL suites (platform)"]
     P4 --> P4C["e2e-ts UI suite (platform)"]
