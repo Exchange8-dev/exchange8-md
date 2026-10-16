@@ -17,7 +17,6 @@ The event pipeline is a set of pure Rust modules (`services/md/src/book.rs`,
 with no clock, no tokio, and no database dependency. The service binary wraps
 them in the Sentin8 platform shell (`sentin8::shell`): axum HTTP/TLS surface,
 `--print-registration` self-registration, DB pool, health endpoint, the Shield
-(sentinel of `sentin8-policy`) admin API mount, mimalloc allocator, and TLS
 termination. MD is a pub/sub-class publisher on Sentin8:MemBus: it publishes the
 `md.trade` (tape) and `md.book` (deltas) families, newest-wins. Durable event
 delivery rides the platform planes: the local `md.outbox` relays to

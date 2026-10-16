@@ -745,7 +745,6 @@ Insecure defaults rejected:
 - No classical TLS fallback — PQ-only terminate in-process.
 
 Unsafe rationale: the unit contains no `unsafe` code (pure core + shell glue;
-allocator safety is delegated to `mimalloc` and the platform crates).
 
 ## 9. Testing Strategy
 

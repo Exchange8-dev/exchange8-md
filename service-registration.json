@@ -2,7 +2,11 @@
   "vertical": "exchange8",
   "services": [
     {
-      "service_type": "exchange8:md"
+      "service_type": "exchange8:md",
+      "telemetry_property": {
+        "slug": "md",
+        "name": "Exchange8:MD Telemetry"
+      }
     }
   ]
 }
