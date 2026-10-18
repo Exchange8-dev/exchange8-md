@@ -19,6 +19,7 @@ mod calendar;
 mod luld;
 mod protection;
 mod registration;
+mod openapi;
 mod snapshot;
 
 use std::sync::Arc;
