@@ -29,7 +29,7 @@ pub struct SnapshotLevel {
 pub struct Snapshot {
     pub instrument_id: u32,
     pub book_id: u8,
-    /// MD journal sequence at snapshot time — the client's resync cursor.
+    /// MD journal sequence at snapshot time - the client's resync cursor.
     pub seq: u64,
     /// Displayed bids, best first (desc).
     pub bids: Vec<SnapshotLevel>,
@@ -195,7 +195,7 @@ impl SnapshotBuilder {
         }
     }
 
-    /// ME OrderBooked (displayed only — hidden/odd are stripped upstream).
+    /// ME OrderBooked (displayed only - hidden/odd are stripped upstream).
     pub fn on_booked(&mut self, side_bid: bool, price_raw: i128, qty: u64) {
         let m = if side_bid {
             &mut self.bids
@@ -310,7 +310,7 @@ impl SnapshotBuilder {
         }
     }
 
-    /// Deltas after `from_seq` (exclusive) up to now — the SSE replay for a
+    /// Deltas after `from_seq` (exclusive) up to now - the SSE replay for a
     /// reconnecting client with Last-Event-ID. Empty when the client is
     /// current; the caller detects a too-old cursor (first delta seq >
     /// from_seq + 1) and forces a snapshot resync.
@@ -373,7 +373,7 @@ mod tests {
     fn executed_reduces_and_prints_trade() {
         let mut b = SnapshotBuilder::new(3, 0, 128);
         b.on_booked(false, 10_100, 300);
-        // Aggressor buys; the resting ask is consumed — reduce side_bid=false.
+        // Aggressor buys; the resting ask is consumed - reduce side_bid=false.
         b.on_executed(false, 10_100, 300);
         let s = b.snapshot();
         assert_eq!(s.asks.len(), 0); // level removed

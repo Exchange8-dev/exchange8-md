@@ -10,7 +10,7 @@
 //! - **Volatility interruption**: LULD band breach → halt the
 //!   instrument and route it into a volatility auction.
 //! - **Order-to-trade ratio limits**: per-connection OTR watermark.
-//! - **Minimum quote life**: anti-spoofing — orders must rest a
+//! - **Minimum quote life**: anti-spoofing - orders must rest a
 //!   minimum lifetime before cancel/replace.
 //! - **Auction order types**: MOO/MOC/LOO/LOC classification.
 //! - **Random uncrossing window**: randomized start within a window.
@@ -25,7 +25,7 @@
 //! `design/sentin8-exchange8-auctions-technical-design.md`,
 //! `design/sentin8-exchange8-surveillance-technical-design.md`,
 //! `design/sentin8-exchange8-index-engine-technical-design.md`,
-//! `design/sentin8-exchange8-connectivity-operations-technical-design.md` §3–§5.
+//! `design/sentin8-exchange8-connectivity-operations-technical-design.md` §3-§5.
 
 use std::collections::HashMap;
 
@@ -50,7 +50,7 @@ pub struct VolatilityTrigger {
 /// Interruption decision + follow-on auction routing.
 #[derive(Clone, Debug, PartialEq)]
 pub enum InterruptionDecision {
-    /// Within bands — no action.
+    /// Within bands - no action.
     None,
     /// Breach: halt + enter volatility auction.
     HaltAndAuction {
@@ -277,7 +277,7 @@ impl AuctionOrderType {
 // Random uncrossing window
 // ---------------------------------------------------------------------------
 
-/// Randomized uncross start within [open_us, open_us + window_us) —
+/// Randomized uncross start within [open_us, open_us + window_us) -
 /// deterministic xorshift from a per-day seed (reproducible ops replay).
 pub fn uncross_time(day_seed: u64, open_us: u64, window_us: u64) -> u64 {
     if window_us == 0 {
@@ -385,7 +385,7 @@ impl Default for SurveillancePipeline {
 }
 
 // ---------------------------------------------------------------------------
-// Index — divisor rebalancing + publication
+// Index - divisor rebalancing + publication
 // ---------------------------------------------------------------------------
 
 /// Divisor rebalancing on a constituent change: keep the index
@@ -500,7 +500,7 @@ pub struct ReconOrder {
     pub live: bool,
 }
 
-/// Replay events up to (and including) `upto` index — rebuild order state
+/// Replay events up to (and including) `upto` index - rebuild order state
 /// (replays the event stream to rebuild any order/trade state).
 pub fn reconstruct(events: &[ReconEvent], upto: usize) -> HashMap<u64, ReconOrder> {
     let mut orders: HashMap<u64, ReconOrder> = HashMap::new();
@@ -544,7 +544,7 @@ pub fn reconstruct(events: &[ReconEvent], upto: usize) -> HashMap<u64, ReconOrde
 // Order protection (no trade-through of protected quotes)
 // ---------------------------------------------------------------------------
 
-/// A protected quote (Reg NMS NBO/NBB — best bid/offer of the protected
+/// A protected quote (Reg NMS NBO/NBB - best bid/offer of the protected
 /// venue, e.g. the primary listing exchange).
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct ProtectedQuote {
@@ -555,9 +555,9 @@ pub struct ProtectedQuote {
 /// Trade-through decision for one incoming lockable order.
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum ProtectionVerdict {
-    /// No protected quote or price is at-or-better — trade freely.
+    /// No protected quote or price is at-or-better - trade freely.
     Allowed,
-    /// Buying through the protected bid (price < protected bid) — blocked
+    /// Buying through the protected bid (price < protected bid) - blocked
     /// unless an exception applies (sweep, cross, IPO, etc.).
     TradeThroughBid { protected: i128 },
     /// Selling through the protected ask (price > protected ask).

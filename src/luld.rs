@@ -8,7 +8,7 @@
 //! Per-instrument limit-up/limit-down bands around a reference price
 //! (previous close or last auction price) with tiered widths. A trade that
 //! would print outside the band moves the instrument into a limit state;
-//! sustained breaches trigger a volatility interruption (auction — see the
+//! sustained breaches trigger a volatility interruption (auction - see the
 //! auctions design).
 //!
 //! Design: `design/sentin8-exchange8-market-protection-technical-design.md` §2.
@@ -41,9 +41,9 @@ impl Tier {
 pub enum LimitState {
     /// Trading unrestricted.
     None,
-    /// Price at or above the upper band — buy orders restricted.
+    /// Price at or above the upper band - buy orders restricted.
     LimitUp,
-    /// Price at or below the lower band — sell orders restricted.
+    /// Price at or below the lower band - sell orders restricted.
     LimitDown,
     /// Both bands crossed (should not occur; defensive).
     Straddle,

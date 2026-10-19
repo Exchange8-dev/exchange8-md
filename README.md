@@ -41,14 +41,14 @@ Sentin8:Bus and `md.audit_journal` pushes to Sentin8:Sys.
   emergent property of N viewers.
 - **Late joiners need a join point.** A snapshot with its sequence cursor plus a
   bounded replay window lets a reconnecting client either catch up from deltas or
-  take a fresh snapshot — no client-side reconstruction from raw wire dumps.
+  take a fresh snapshot - no client-side reconstruction from raw wire dumps.
 - **Market-state truth must be a machine, not a schedule script.** Preopen →
   open-auction → continuous → close-auction → post-close, plus halt/resume, are
   a state machine consuming calendar transitions and emitting `S` codes and
   instrument-status effects; the alternative (a Cron script mutating flags)
   cannot express invalid transitions, replays, or idempotency.
 - **Protection is data, not a side effect.** LULD bands, limit states, and
-  protected quotes are queryable market data — every consumer (ME price
+  protected quotes are queryable market data - every consumer (ME price
   protection, OMS pre-trade checks, risk, apps) reads the same band/state
   surface instead of recomputing its own.
 - **No bespoke infrastructure.** Identity, TLS, policy administration, event
@@ -124,48 +124,48 @@ graph TD
 
 The data flow per mechanism:
 
-- **Book publication** — an ingested ME/Gateway event updates the
+- **Book publication** - an ingested ME/Gateway event updates the
   per-(book, instrument) consolidated mirror, which emits the ITCH VER2 byte
   messages for the delta and the SSE delta for the app feed.
-- **Snapshots** — the `SnapshotBuilder` maintains per-instrument state with a
+- **Snapshots** - the `SnapshotBuilder` maintains per-instrument state with a
   strictly increasing `seq`; `GET`-grade snapshot shapes and SSE delta lines
   render from the same in-memory state, and the replay window answers
   `Last-Event-ID` resumption.
-- **LULD / protection** — the band engine computes upper/lower from
+- **LULD / protection** - the band engine computes upper/lower from
   `tier × reference`, classifies prints and orders, and hands
   halt-and-auction decisions to the volatility-auction arc.
-- **Calendar** — the phase machine consumes calendar transitions (from
+- **Calendar** - the phase machine consumes calendar transitions (from
   Sentin8:Cron schedule-fire) and emits `S` codes plus instrument status.
 
 ## 4. Key Traits and Data Structures
 
-- **Consolidated book (`ConsolidatedBook`)** — per-(book, instrument) mirror holding
+- **Consolidated book (`ConsolidatedBook`)** - per-(book, instrument) mirror holding
   the resting-order map (price, qty, side, hidden, odd flag) and the two ordered
   displayed-level sets (bids descending, asks ascending). Feeding one engine
   event returns the wire messages for that delta in a fixed order; hidden
   orders produce no add, odd portions never add displayed depth, and replace is
   an internal kill + add that emits a single `U`.
-- **ITCH VER2 outputs (`ItchOut`)** — message type char plus the encoded VER2
+- **ITCH VER2 outputs (`ItchOut`)** - message type char plus the encoded VER2
   payload (type byte included). Fixed lengths come from `exchange8::itch`
   constants; the instrument id on the wire is a u16 field width (`itch_instrument_id`).
-- **Bust/amend fan-out (`BustFanout`)** — ordered variant list per Clearing bust
+- **Bust/amend fan-out (`BustFanout`)** - ordered variant list per Clearing bust
   (trade-cancel, broken-trade marker, book-level restore) or amend
   (cancel → restore original → corrected print → consume corrected volume).
-- **Calendar state machine (`MarketCalendar`)** — `Closed → PreOpen →
+- **Calendar state machine (`MarketCalendar`)** - `Closed → PreOpen →
   OpenAuction → Continuous → CloseAuction → PostClose → Closed` with halt/resume
   edges and an instrument-status projection per phase (Open / QuotationOnly /
   Halted). Invalid transitions are no-ops; emitted `S` codes drain in order.
-- **LULD engine (`LuldEngine`)** — tiers map to band widths in basis points
+- **LULD engine (`LuldEngine`)** - tiers map to band widths in basis points
   (±5% / ±10% / ±20%), bands are computed from the reference price, prints
   classify into `LimitUp` / `LimitDown` / `None`, and the order gate blocks
   the wrong-side direction while restricting prices to inside the band.
-- **Snapshot builder (`SnapshotBuilder`)** — per-instrument L1/L2 state with a
+- **Snapshot builder (`SnapshotBuilder`)** - per-instrument L1/L2 state with a
   monotonically increasing `seq` (one bump per applied event), a bounded
   `VecDeque` replay ring (`replay_window`), and the resync predicate
   (`needs_resync`) that forces a fresh snapshot when the cursor falls out of
   the window. Deltas are `Add` / `Reduce` / `Delete` / `Trade`, each with an
   SSE rendering whose `id:` is the sequence cursor.
-- **Protection extensions (`protection.rs`)** — the volatility-auction arc
+- **Protection extensions (`protection.rs`)** - the volatility-auction arc
   (`Continuous → Halted → Call → Resuming → Continuous`), the per-connection
   order-to-trade-ratio guard with grace trades, the minimum-quote-life
   anti-spoofing guard, trade-through verdicts against the protected quote, the
@@ -196,13 +196,13 @@ The data flow per mechanism:
 - **Pure core with the shell as the only I/O surface.** Every domain module is
   a pure struct/free-function module testable without tokio or a database;
   in-binary `#[cfg(test)]` runs without a service bootstrap. The cost is that
-  the axum wiring is thin and mostly shared (health, policy admin, SSE glue) —
+  the axum wiring is thin and mostly shared (health, policy admin, SSE glue) -
   accepted, because market-data logic must be golden-byte-testable.
 - **Display policy upstream of the snapshot.** Hidden/odd stripping happens in
   the book mapper, so snapshots and SSE deltas only ever see displayed volume.
   The alternative (strip per consumer) would re-implement board policy in every
   surface and drift.
-- **Randomized uncross via a deterministic per-day seed** — an xorshift
+- **Randomized uncross via a deterministic per-day seed** - an xorshift
   derivation from a day seed and the window; the anti-gaming randomness is
   reproducible for an ops replay, unlike wall-clock entropy.
 - **Rejected: client-side book reconstruction from raw Mold/ITCH dumps as the

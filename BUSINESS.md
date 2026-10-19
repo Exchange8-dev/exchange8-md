@@ -1,4 +1,4 @@
-# Exchange8:MD — Business Requirements & Functionality
+# Exchange8:MD - Business Requirements & Functionality
 
 > Audience: product owners, business analysts, and anyone evaluating what
 > Exchange8:MD **does for the business**. For architecture read `README.md`;
@@ -9,7 +9,7 @@
 - **Give every market participant the same picture of the market.** Exchange8:MD
   turns matching-engine activity into the venue's public market data: the
   consolidated depth book, the trade tape, last-trade statistics, and market
-  status — one authoritative publication per event, for every consumer.
+  status - one authoritative publication per event, for every consumer.
 - **Meet exchange-grade publication obligations.** An MTF/ATS must publish
   order-book depth, trade prints (including busts and corrections), and market
   state in standardized wire formats with sequence integrity; Exchange8:MD is the
@@ -68,7 +68,7 @@
 | Capability | Business rule |
 |---|---|
 | Book mirroring | The published book is an exact projection of the matching engine's book for that market and security; any divergence is detectable and must never become visible depth |
-| Display policy | Hidden (non-displayed) orders never appear as book depth — they surface only as trade prints; odd-lot volume is excluded from displayed depth |
+| Display policy | Hidden (non-displayed) orders never appear as book depth - they surface only as trade prints; odd-lot volume is excluded from displayed depth |
 | Order lifecycle reporting | Additions, partial reductions, cancels, and replacements are each reported in the venue's message forms; a replacement is one report, not two |
 | Trade prints | Every trade prints with a unique match number; executions against displayed depth reduce that depth immediately |
 | Last & volume | The last traded price and cumulative volume per security are maintained continuously and exposed in snapshots and stats |
@@ -81,12 +81,12 @@
 | Capability | Business rule |
 |---|---|
 | LULD bands | Each security has upper/lower thresholds around a reference price (prior close or last auction price) in tiered widths; a trade at or beyond a threshold puts the security into a limit state |
-| Directional restriction | In a limit-up state, buy orders are blocked; in a limit-down state, sell orders are blocked — and in both cases orders priced outside the band are rejected |
+| Directional restriction | In a limit-up state, buy orders are blocked; in a limit-down state, sell orders are blocked - and in both cases orders priced outside the band are rejected |
 | Automatic release | A return to in-band trading releases the limit state; trading resumes unrestricted |
 | Volatility interruption | A sustained band breach halts the security and routes it into a volatility auction (halt → call → uncross → resume) with a randomized call end, reproducible for ops replay |
 | Trade-through protection | An order may not execute through the protected best bid/offer of a protected venue; a crossing sweep that reaches a better price is exempt |
-| Order-to-trade ratio | A connection whose order submission rate massively exceeds its executed trades (beyond a grace period for new sessions) exceeds its meter — the input to order-flow restrictions |
-| Minimum quote life | A displayed order must rest for a minimum time before it may be cancelled — an anti-spoofing control on quote flicker |
+| Order-to-trade ratio | A connection whose order submission rate massively exceeds its executed trades (beyond a grace period for new sessions) exceeds its meter - the input to order-flow restrictions |
+| Minimum quote life | A displayed order must rest for a minimum time before it may be cancelled - an anti-spoofing control on quote flicker |
 | Surveillance pipeline | Feed observations run through configured detectors; alerts of high severity or above are escalated into open cases in the same pipeline |
 
 ### Calendar (trading-day operations)
@@ -97,7 +97,7 @@
 | System events | Each phase change publishes the venue's system-event codes in order, so all consumers share one timeline of the day |
 | Instrument status | Securities are tradable (open) only during continuous trading; during auctions they are quotation-only; outside sessions and during halts they are halted |
 | Halts & resumes | An operational halt moves the session to halted semantics without ending the day; resumption returns straight to continuous trading |
-| Idempotent replays | Calendar event replays outside the valid transition are ignored — re-delivering a scheduled fire cannot double-publish a phase change |
+| Idempotent replays | Calendar event replays outside the valid transition are ignored - re-delivering a scheduled fire cannot double-publish a phase change |
 | Bust & amend handling | A busted trade retracts the original print and returns its volume to the book; a corrected trade retracts the original, restores volume, and reprints with corrected terms |
 
 ## 4. Business Events (Outbound)
@@ -123,7 +123,7 @@ schedule-fires; platform policy hot-reload events.
 
 1. **One picture of the market.** For any (market, security) at any instant,
    exactly one displayed book is published, derived from the engine's own
-   activity — participants never see diverging books from different surfaces.
+   activity - participants never see diverging books from different surfaces.
 2. **A hidden order is never displayed.** Non-displayed and odd-lot liquidity
    never adds depth, whatever the path that created or removed it.
 3. **Every print is unique and permanent-or-corrected.** Each execution gets
@@ -138,7 +138,7 @@ schedule-fires; platform policy hot-reload events.
    infer missing activity.
 6. **Volatility boundaries are mechanical.** A threshold state exists only
    between configured bands around a defined reference; it releases on an
-   in-band trade and clears after the volatility auction completes — never by
+   in-band trade and clears after the volatility auction completes - never by
    manual bookkeeping.
 7. **Orders cannot trade through protected quotes** unless an explicit
    exception (e.g. the sweep exception) applies.
@@ -152,7 +152,7 @@ schedule-fires; platform policy hot-reload events.
     but never drops, the audit trail; event publication persists locally and
     retries until delivered, with deduplication keyed per event.
 11. **Feed credentials are revocable per consumer.** Session access uses
-    per-consumer credentials held as secret references — never shared
+    per-consumer credentials held as secret references - never shared
     passwords, never inline secrets in data tables.
 
 ## 6. Target-User Roles & Use Cases
@@ -195,22 +195,22 @@ schedule-fires; platform policy hot-reload events.
 
 ## 8. Dependencies & Reliance
 
-- **Exchange8:ME / Exchange8:Gateway** — the source of order, trade, cross, and instrument
+- **Exchange8:ME / Exchange8:Gateway** - the source of order, trade, cross, and instrument
   state events; without them there is nothing to publish.
-- **Exchange8:Clearing** — busts and corrections (the only legitimate tape
+- **Exchange8:Clearing** - busts and corrections (the only legitimate tape
   retractions/corrections).
-- **Exchange8:VFeeds** — upstream venue quotation data underlying protected quotes.
-- **Sentin8:Cron** — the trading-calendar scheduling (preopen/open/close/
+- **Exchange8:VFeeds** - upstream venue quotation data underlying protected quotes.
+- **Sentin8:Cron** - the trading-calendar scheduling (preopen/open/close/
   shutdown fires that drive the session machine).
-- **Sentin8:Bus** — durable inbound event consumption and outbound event
+- **Sentin8:Bus** - durable inbound event consumption and outbound event
   delivery (idempotent produce).
-- **Sentin8:Sys** — audit intake (`POST /v1/audit`) and hostname resolution
+- **Sentin8:Sys** - audit intake (`POST /v1/audit`) and hostname resolution
   for the TLS plane.
-- **Sentin8:Auth / Sentin8:Policy (Shield)** — identity issuance, M2M
+- **Sentin8:Auth / Sentin8:Policy (Shield)** - identity issuance, M2M
   registration, and the enforced policy engine + admin surface.
-- **Sentin8:BFF** — user-facing subscription transport for snapshots/deltas.
-- **Sentin8:DB (PostgreSQL 18)** — schema `md` persistence under RLS.
-- **Platform shell + Captain + Proxy/tls** — boot, drain/upgrade health,
+- **Sentin8:BFF** - user-facing subscription transport for snapshots/deltas.
+- **Sentin8:DB (PostgreSQL 18)** - schema `md` persistence under RLS.
+- **Platform shell + Captain + Proxy/tls** - boot, drain/upgrade health,
   context headers, and post-quantum termination.
 
 ## 9. Acceptance Criteria
@@ -220,7 +220,7 @@ schedule-fires; platform policy hot-reload events.
    then stays current via deltas without gaps.
 2. A reconnecting subscriber with a recent cursor resumes without a fresh
    snapshot; one with an older cursor is cleanly redirected to a fresh
-   snapshot — never served fabricated history.
+   snapshot - never served fabricated history.
 3. All venue wire forms (add, execute, cancel, delete, replace, trade,
    broken trade, system events) encode byte-for-byte to the platform codec
    contracts, and session replay honors per-stream sequences.
@@ -243,7 +243,7 @@ schedule-fires; platform policy hot-reload events.
 11. An operator can see live feed session health and LULD bands on the admin
     pages and act through the authorized, audited admin surfaces.
 12. A captured session log passes the certification checks for logon order
-    and per-order reports — an onboarding-client readiness gate.
+    and per-order reports - an onboarding-client readiness gate.
 
 ## 10. Open Business Questions
 

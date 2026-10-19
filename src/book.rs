@@ -10,14 +10,14 @@
 //! maps each delta to the proprietary ITCH VER2 wire messages.
 //!
 //! Rules preserved from the feed handler:
-//! - **Hidden orders never print an Add** — hidden liquidity surfaces only
+//! - **Hidden orders never print an Add** - hidden liquidity surfaces only
 //!   as `P` Trade / `Q` Cross prints.
 //! - **Odd-lot volume is stripped from displayed depth** (board part only,
 //! VER2 display policy).
 //! - **Replace = kill(old) + add(new)** internally, emitting `U` on the wire.
 //! - Partial reduces emit `X` Order Cancel with the *remaining* shares.
 //!
-//! Design: `design/sentin8-exchange8-market-data-technical-design.md` §4.1–4.2.
+//! Design: `design/sentin8-exchange8-market-data-technical-design.md` §4.1-4.2.
 
 use std::collections::BTreeMap;
 
@@ -54,7 +54,7 @@ pub struct ItchOut {
 
 /// Per-(book, instrument) consolidated book + event→ITCH mapper.
 ///
-/// Feeding an event returns the wire messages for that delta (possibly none —
+/// Feeding an event returns the wire messages for that delta (possibly none -
 /// e.g. hidden orders produce no Add).
 pub struct ConsolidatedBook {
     pub book_id: u8,

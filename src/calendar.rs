@@ -43,7 +43,7 @@ pub struct BustEvent {
 /// ITCH fan-out messages produced by a bust/amend.
 #[derive(Clone, Debug, PartialEq)]
 pub enum BustFanout {
-    /// `B` Broken Trade — carried match (trade) number.
+    /// `B` Broken Trade - carried match (trade) number.
     BrokenTrade { trade_id: u64 },
     /// `N` trade-cancel semantics for the original print (amend path).
     TradeCancel { trade_id: u64 },
@@ -127,17 +127,17 @@ pub fn on_amend(e: &AmendEvent) -> Vec<BustFanout> {
 /// `S` System Event codes (wire spec parity).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum SystemEventCode {
-    /// `O` — start of messages (preopen).
+    /// `O` - start of messages (preopen).
     StartOfMessages,
-    /// `Q` — start of open auction period.
+    /// `Q` - start of open auction period.
     StartOfOpenAuction,
-    /// `M` — end of open auction / start of continuous.
+    /// `M` - end of open auction / start of continuous.
     EndOfOpenAuction,
-    /// `C` — end of continuous trading (close auction start).
+    /// `C` - end of continuous trading (close auction start).
     EndOfContinuous,
-    /// `E` — end of close auction.
+    /// `E` - end of close auction.
     EndOfCloseAuction,
-    /// `P` — end of messages (session over).
+    /// `P` - end of messages (session over).
     EndOfMessages,
 }
 
@@ -180,7 +180,7 @@ pub enum CalendarTransition {
     EndContinuous,
     EndCloseAuction,
     SessionOver,
-    /// Operational halt (LULD / admin) — pauses to PostClose semantics
+    /// Operational halt (LULD / admin) - pauses to PostClose semantics
     /// without ending the session.
     Halt,
     /// Resume continuous after a halt.
@@ -369,7 +369,7 @@ mod tests {
     #[test]
     fn invalid_transitions_are_ignored() {
         let mut cal = MarketCalendar::new();
-        // EndContinuous from Closed — no-op.
+        // EndContinuous from Closed - no-op.
         cal.on_transition(CalendarTransition::EndContinuous);
         assert_eq!(cal.phase(), SessionPhase::Closed);
         assert!(cal.take_events().is_empty());

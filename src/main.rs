@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: Copyright Contributors to the Exchange8:MD
 // SPDX-License-Identifier: Apache-2.0
 
-//! Exchange8:MD service binary — market-data publication (ITCH/Mold/Soup) + LULD bands.
+//! Exchange8:MD service binary - market-data publication (ITCH/Mold/Soup) + LULD bands.
 //!
 //! Design: `design/sentin8-exchange8-md-technical-design.md` (see the
 //! service doc for the exact file). Core logic in the sibling modules;
@@ -25,10 +25,10 @@ mod snapshot;
 use std::sync::Arc;
 
 /// Service state: shell core + the MemBus publish handle (see
-/// services/md/DESIGN.md §2 — MemBus publisher).
+/// services/md/DESIGN.md §2 - MemBus publisher).
 ///
 /// MD is a pub/sub-class publisher: `md.trade` (tape) and `md.book`
-/// (deltas) — newest-wins families, next message supersedes.
+/// (deltas) - newest-wins families, next message supersedes.
 pub struct MdState {
     pub core: sentin8::shell::ServiceCore,
     pub membus: sentin8::membus::ServiceBus,
@@ -42,7 +42,7 @@ fn extend_router(
     // the HTTP router carries health + admin endpoints only.
 
     app
-        // ── Sentin8:Policy admin API (see services/md/DESIGN.md §4 — shared implementation;
+        // ── Sentin8:Policy admin API (see services/md/DESIGN.md §4 - shared implementation;
         // handlers generic over this state via the HasPolicyAdmin impl below;
         // axum 0.8 cannot merge a bound Router<()> into Router<std::sync::Arc<MdState>>).
         .route(
