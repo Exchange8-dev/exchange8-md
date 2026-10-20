@@ -11,8 +11,7 @@
 
 use utoipa::OpenApi;
 
-pub mod w {
-}
+pub mod w {}
 
 /// OpenAPI spec for the md API.
 #[derive(OpenApi)]
