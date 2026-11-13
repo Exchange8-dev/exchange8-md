@@ -152,6 +152,9 @@ const M2M_GRANTS: &[M2mGrant] = &[
 
 const SQL_1_INIT: &str = include_str!("../sql/init.sql");
 
+fn empty_openapi() -> serde_json::Value {
+    serde_json::to_value(crate::openapi::MdOpenApi::openapi()).unwrap_or(serde_json::Value::Null)
+}
 
 pub fn print(section: Option<String>) -> anyhow::Result<()> {
     let reg = Registration {
@@ -178,11 +181,11 @@ pub fn print(section: Option<String>) -> anyhow::Result<()> {
         service_actions: None,
         m2m_grants: Some(M2M_GRANTS),
         openapi_url: "/openapi.json",
-        openapi: crate::OPENAPI_DUMP,
+        openapi: empty_openapi,
         policies: POLICIES,
         relations: RELATIONS,
         event_triggers: &[],
         schedules: &[],
     };
-    sentin8::registration::print_registration(section, &reg, crate::OPENAPI_DUMP)
+    sentin8::registration::print_registration(section, &reg, empty_openapi)
 }
