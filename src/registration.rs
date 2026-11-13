@@ -8,7 +8,6 @@
 //! Output via `--print-registration` (see the platform
 //! `sentin8-service-self-registration-design.md`).
 
-use utoipa::OpenApi;
 
 use sentin8::registration::{
     AdminScope, AdminUi, AdminUiPage, ErrorCode, M2mGrant, PgRole, PolicySetDecl, Registration,
@@ -152,11 +151,14 @@ const M2M_GRANTS: &[M2mGrant] = &[
 
 const SQL_1_INIT: &str = include_str!("../sql/init.sql");
 
-fn empty_openapi() -> serde_json::Value {
-    serde_json::to_value(crate::openapi::MdOpenApi::openapi()).unwrap_or(serde_json::Value::Null)
-}
-
 pub fn print(section: Option<String>) -> anyhow::Result<()> {
+    // The utoipa dump is a binary-crate static (main.rs): test harnesses
+    // embedding this file carry neither the static nor the openapi module
+    // and never print a spec.
+    #[cfg(not(test))]
+    let dump: fn() -> serde_json::Value = crate::OPENAPI_DUMP;
+    #[cfg(test)]
+    let dump: fn() -> serde_json::Value = || serde_json::Value::Null;
     let reg = Registration {
         service_type: "exchange8:md",
         subdomain: "exchange8-md",
@@ -181,11 +183,11 @@ pub fn print(section: Option<String>) -> anyhow::Result<()> {
         service_actions: None,
         m2m_grants: Some(M2M_GRANTS),
         openapi_url: "/openapi.json",
-        openapi: empty_openapi,
+        openapi: dump,
         policies: POLICIES,
         relations: RELATIONS,
         event_triggers: &[],
         schedules: &[],
     };
-    sentin8::registration::print_registration(section, &reg, empty_openapi)
+    sentin8::registration::print_registration(section, &reg, dump)
 }
